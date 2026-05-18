@@ -22,11 +22,13 @@ public class ProductRepository : IProductRepository
         return await _context.Products.ToListAsync(); 
     }
 
-    public async Task<Domain.Entity.Product> Create(Domain.Entity.Product product)
+    public async Task<Domain.Entity.Product?> Create(Domain.Entity.Product product)
     {
         await _context.Products.AddAsync(product);
         await _context.SaveChangesAsync();
-        return product;
+        return await _context.Products
+            .Include(p => p.Category)
+            .FirstOrDefaultAsync(p => p.Id == product.Id);
     }
 
     public async Task<Domain.Entity.Product> Update(Domain.Entity.Product product)
