@@ -12,14 +12,15 @@ public class ProductRepository : IProductRepository
     {
         _context = context;
     }
-    public async Task<Domain.Entity.Product> GetById(int id)
+    public async Task<Domain.Entity.Product?> GetById(int id)
     {
-        return await _context.Products.FindAsync(id);
+        return await _context.Products.Include(p => p.Category).
+            FirstOrDefaultAsync(p => p.Id == id);
     }
 
     public async Task<IEnumerable<Domain.Entity.Product?>> GetAll()
     {
-        return await _context.Products.ToListAsync(); 
+        return await _context.Products.Include( p => p.Category).ToListAsync();
     }
 
     public async Task<Domain.Entity.Product?> Create(Domain.Entity.Product product)
