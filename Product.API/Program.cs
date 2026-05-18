@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Product.Application.Interface;
+using Product.Application.Service;
 using Product.Infrastructure.Data;
 using Product.Infrastructure.Repository;
 using ProductService.Middleware;
@@ -16,6 +17,9 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 builder.Services.AddScoped<IProductRepository , ProductRepository>();
 builder.Services.AddScoped<IProductService, Product.Application.Service.ProductService>();
+
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+builder.Services.AddScoped<ICategoryService, CategoryService>();
 
 
 
