@@ -1,4 +1,5 @@
-﻿using Product.Application.Interface;
+﻿using Microsoft.EntityFrameworkCore;
+using Product.Application.Interface;
 using Product.Infrastructure.Data;
 
 namespace Product.Infrastructure.Repository;
@@ -11,28 +12,33 @@ public class ProductRepository : IProductRepository
     {
         _context = context;
     }
-    public Task<Domain.Entity.Product> GetById(int id)
+    public async Task<Domain.Entity.Product> GetById(int id)
     {
-        throw new NotImplementedException();
+        return await _context.Products.FindAsync(id);
     }
 
-    public Task<IEnumerable<Domain.Entity.Product>> GetAll()
+    public async Task<IEnumerable<Domain.Entity.Product?>> GetAll()
     {
-        throw new NotImplementedException();
+        return await _context.Products.ToListAsync(); 
     }
 
-    public Task<Domain.Entity.Product> Create(Domain.Entity.Product product)
+    public async Task<Domain.Entity.Product> Create(Domain.Entity.Product product)
     {
-        throw new NotImplementedException();
+        await _context.Products.AddAsync(product);
+        await _context.SaveChangesAsync();
+        return product;
     }
 
-    public Task<Domain.Entity.Product> Update(Domain.Entity.Product product)
-    {
-        throw new NotImplementedException();
+    public async Task<Domain.Entity.Product> Update(Domain.Entity.Product product)
+    { 
+        _context.Products.Update(product);
+        await _context.SaveChangesAsync();
+        return product;
     }
 
-    public Task Delete(Domain.Entity.Product product)
+    public async Task Delete(Domain.Entity.Product product)
     {
-        throw new NotImplementedException();
+         _context.Products.Remove(product);
+         await _context.SaveChangesAsync();
     }
 }
