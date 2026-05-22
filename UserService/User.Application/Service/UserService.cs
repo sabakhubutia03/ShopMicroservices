@@ -144,4 +144,21 @@ public class UserService : IUserService
             Created = getUser.CreatedAt
         };
     }
+
+    public async Task Logout(string refreshToken)
+    {
+        var token = await _refreshTokenRepository.GetByToken(refreshToken);
+        if (token == null)
+        {
+            throw new ApiException(
+                "Token not found",
+                "NotFound",
+                404,
+                "Token not found",
+                "USER_LOAD_FAILED"
+            );
+        }
+        
+        await _refreshTokenRepository.Remove(token);
+    }
 }

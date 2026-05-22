@@ -7,4 +7,5 @@ public interface IUserService
     Task<UserResponseDto> Register(RegisterDto dto);
     Task<UserResponseDto> Login(LoginDto dto);
     Task<UserResponseDto> GetById(int id);
+    Task Logout(string refreshToken);
 }

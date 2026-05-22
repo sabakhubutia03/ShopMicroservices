@@ -38,4 +38,11 @@ public class UserController : ControllerBase
         var result = await _userService.GetById(id);
         return Ok(result);
     }
+
+    [HttpPost("logout")]
+    public async Task<ActionResult> Logout(string refreshToken)
+    {
+        await _userService.Logout(refreshToken);
+        return Ok("Logged out Successfully");
+    }
 }

@@ -32,6 +32,10 @@ public class JwtService : IJwtService
             Expires = DateTime.UtcNow.AddMinutes(
                 double.Parse(_config["JwtSettings:ExpiresInMinutes"]!)
             ),
+            
+            Issuer = _config["JwtSettings:Issuer"],
+            Audience = _config["JwtSettings:Audience"],
+            
             SigningCredentials = new SigningCredentials(
                 new SymmetricSecurityKey(key),
                 SecurityAlgorithms.HmacSha256Signature
