@@ -9,4 +9,5 @@ public class AppDbContext : DbContext
         
     }
     public DbSet<Domain.Entity.User> Users { get; set; }
+    public DbSet<Domain.Entity.RefreshToken> RefreshTokens { get; set; }
 }

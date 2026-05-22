@@ -1,5 +1,6 @@
 ﻿using User.Application.DTOs;
 using User.Application.Interface;
+using User.Domain.Entity;
 using User.Domein.Exceptions;
 
 namespace User.Application.Service;
@@ -7,10 +8,14 @@ namespace User.Application.Service;
 public class UserService : IUserService
 { 
     private readonly IUserRepository _userRepository;
+    private readonly IJwtService _jwtService;
+    private readonly IRefreshTokenRepository _refreshTokenRepository;
 
-    public UserService(IUserRepository userRepository)
+    public UserService(IUserRepository userRepository, IJwtService jwtService, IRefreshTokenRepository refreshTokenRepository)
     {
         _userRepository = userRepository;
+        _jwtService = jwtService;
+        _refreshTokenRepository = refreshTokenRepository;
     }
     
     public async Task<UserResponseDto> Register(RegisterDto dto)
@@ -49,13 +54,25 @@ public class UserService : IUserService
           );
       }
 
-        return new UserResponseDto
-        {
-            Id = createUser.Id,
-            UserName = createUser.Username,
-            Email = createUser.Email,
-            Created = createUser.CreatedAt,
-        };
+      var refreshToken = new RefreshToken
+      {
+          Token = _jwtService.GenerateRefreshToken(),
+          UserId = createUser.Id,
+          CreatedAt = DateTime.UtcNow,
+          ExpiresAt = DateTime.UtcNow.AddDays(7),
+          IsRevoked = false
+      };
+      await _refreshTokenRepository.Create(refreshToken);
+      
+      return new UserResponseDto
+      {
+          Id = createUser.Id,
+          UserName = createUser.Username,
+          Email = createUser.Email,
+          Created = createUser.CreatedAt,
+          AccessToken = _jwtService.GenerateAccessToken(createUser),
+          RefreshToken = refreshToken.Token
+      };
     }
 
     public async Task<UserResponseDto> Login(LoginDto dto)
@@ -84,12 +101,24 @@ public class UserService : IUserService
             );
         }
 
+        var refreshToken = new RefreshToken
+        {
+            Token = _jwtService.GenerateRefreshToken(),
+            UserId = checkEmail.Id,
+            CreatedAt = DateTime.UtcNow,
+            ExpiresAt = DateTime.UtcNow.AddDays(7),
+            IsRevoked = false
+        };
+        await _refreshTokenRepository.Create(refreshToken);
+        
         return new UserResponseDto
         {
             Id = checkEmail.Id,
             UserName = checkEmail.Username,
             Email = checkEmail.Email,
             Created = checkEmail.CreatedAt,
+            AccessToken = _jwtService.GenerateAccessToken(checkEmail),
+            RefreshToken = refreshToken.Token
         };
     }
 
@@ -101,7 +130,7 @@ public class UserService : IUserService
             throw new ApiException(
                 $"User not found Id - {id}",
                 "NotFound",
-                400,
+                404,
                 "User not found",
                 "USER_LOAD_FAILED"
             );
