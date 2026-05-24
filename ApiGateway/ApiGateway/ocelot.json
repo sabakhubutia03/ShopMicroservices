@@ -10,7 +10,8 @@
           "Host": "localhost",
           "Port": 5063
         }
-      ]
+      ],
+      "SwaggerKey": "userservice"
     },
     {
       "UpstreamPathTemplate": "/api/product/{everything}",
@@ -21,6 +22,29 @@
         {
           "Host": "localhost",
           "Port": 5149
+        }
+      ],
+      "SwaggerKey": "productservice"
+    }
+  ],
+  "SwaggerEndPoints": [
+    {
+      "Key": "userservice",
+      "Config": [
+        {
+          "Name": "User Service",
+          "Version": "v1",
+          "Url": "http://localhost:5063/swagger/v1/swagger.json"
+        }
+      ]
+    },
+    {
+      "Key": "productservice",
+      "Config": [
+        {
+          "Name": "Product Service",
+          "Version": "v1",
+          "Url": "http://localhost:5149/swagger/v1/swagger.json"
         }
       ]
     }
