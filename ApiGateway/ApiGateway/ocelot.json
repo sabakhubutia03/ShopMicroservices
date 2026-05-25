@@ -25,6 +25,19 @@
         }
       ],
       "SwaggerKey": "productservice"
+      },
+    {
+      "UpstreamPathTemplate": "/api/category/{everything}",
+      "UpstreamHttpMethod": ["GET", "POST" , "PUT" , "DELETE"],
+      "DownstreamPathTemplate": "/api/category/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port" : 5149
+        }
+      ],
+      "SwaggerKey": "productservice"
     }
   ],
   "SwaggerEndPoints": [
