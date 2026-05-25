@@ -1,0 +1,31 @@
+name: Build and Test
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 9.0.x
+
+    - name: Build UserService
+      run: dotnet build ./UserService/UserService.sln
+
+    - name: Build ProductService
+      run: dotnet build ./ProductService/ProductService.sln
+
+    - name: Build OrderService
+      run: dotnet build ./OrderService/OrderService.sln
+
+    - name: Build ApiGateway
+      run: dotnet build ./ApiGateway/ApiGateway.sln
