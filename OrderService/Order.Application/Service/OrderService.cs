@@ -158,9 +158,9 @@ public class OrderService : IOrderService
         {
             throw new ApiException(
                 "Invalid order id",
-                "BedRequest",
+                "BadRequest",
                 400,
-                "Order Id not found",
+                "BadRequest",
                 "Order not found"
             );
         }
