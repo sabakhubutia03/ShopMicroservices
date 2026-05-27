@@ -38,6 +38,19 @@
         }
       ],
       "SwaggerKey": "productservice"
+    },
+    {
+      "UpstreamPathTemplate": "/api/order/{everything}",
+      "UpstreamHttpMethod": ["GET" , "POST" , "PUT", "DELETE"],
+      "DownstreamPathTemplate": "/api/order/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port" : 5270
+        }
+      ],
+      "SwaggerKey" : "orderservice"
     }
   ],
   "SwaggerEndPoints": [
@@ -58,6 +71,16 @@
           "Name": "Product Service",
           "Version": "v1",
           "Url": "http://localhost:5149/swagger/v1/swagger.json"
+        }
+      ]
+    },
+    {
+      "Key" : "orderservice",
+      "Config": [
+        {
+          "Name": "Order Service",
+          "Version" : "v1",
+          "Url": "http://localhost:5270/swagger/v1/swagger.json"
         }
       ]
     }
