@@ -32,6 +32,7 @@ public class UserController : ControllerBase
         return Ok(result);
     }
     
+    [AllowAnonymous]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetById(int id)
     {
