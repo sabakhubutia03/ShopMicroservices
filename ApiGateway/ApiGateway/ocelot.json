@@ -2,13 +2,13 @@
   "Routes": [
     {
       "UpstreamPathTemplate": "/api/user/{everything}",
-      "UpstreamHttpMethod": ["GET", "POST" , "PUT" , "DELETE"],
-      "DownstreamPathTemplate" : "/api/user/{everything}",
+      "UpstreamHttpMethod": ["GET", "POST", "PUT", "DELETE"],
+      "DownstreamPathTemplate": "/api/user/{everything}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5063
+          "Host": "userservice",
+          "Port": 8080
         }
       ],
       "SwaggerKey": "userservice"
@@ -20,37 +20,37 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5149
+          "Host": "productservice",
+          "Port": 8080
         }
       ],
       "SwaggerKey": "productservice"
-      },
+    },
     {
       "UpstreamPathTemplate": "/api/category/{everything}",
-      "UpstreamHttpMethod": ["GET", "POST" , "PUT" , "DELETE"],
+      "UpstreamHttpMethod": ["GET", "POST", "PUT", "DELETE"],
       "DownstreamPathTemplate": "/api/category/{everything}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port" : 5149
+          "Host": "productservice",
+          "Port": 8080
         }
       ],
       "SwaggerKey": "productservice"
     },
     {
       "UpstreamPathTemplate": "/api/order/{everything}",
-      "UpstreamHttpMethod": ["GET" , "POST" , "PUT", "DELETE"],
+      "UpstreamHttpMethod": ["GET", "POST", "PUT", "DELETE"],
       "DownstreamPathTemplate": "/api/order/{everything}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port" : 5270
+          "Host": "orderservice",
+          "Port": 8080
         }
       ],
-      "SwaggerKey" : "orderservice"
+      "SwaggerKey": "orderservice"
     }
   ],
   "SwaggerEndPoints": [
@@ -60,7 +60,7 @@
         {
           "Name": "User Service",
           "Version": "v1",
-          "Url": "http://localhost:5063/swagger/v1/swagger.json"
+          "Url": "http://userservice:8080/swagger/v1/swagger.json"
         }
       ]
     },
@@ -70,17 +70,17 @@
         {
           "Name": "Product Service",
           "Version": "v1",
-          "Url": "http://localhost:5149/swagger/v1/swagger.json"
+          "Url": "http://productservice:8080/swagger/v1/swagger.json"
         }
       ]
     },
     {
-      "Key" : "orderservice",
+      "Key": "orderservice",
       "Config": [
         {
           "Name": "Order Service",
-          "Version" : "v1",
-          "Url": "http://localhost:5270/swagger/v1/swagger.json"
+          "Version": "v1",
+          "Url": "http://orderservice:8080/swagger/v1/swagger.json"
         }
       ]
     }
