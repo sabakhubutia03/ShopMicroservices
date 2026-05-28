@@ -23,6 +23,7 @@ public class ProductController : ControllerBase
         return Ok(response);
     }
 
+    [AllowAnonymous]
     [HttpGet("{id}")]
     public async Task<ActionResult<ProductResponseDto>> GetById(int id)
     {
