@@ -1,7 +1,11 @@
 using System.Text;
+using FluentValidation;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using User.Application.Behaviors;
+using User.Application.Commands.RegisterUser;
 using User.Infrastructure.Data;
 using User.Infrastructure.Repository;
 using User.Application.Interface;
@@ -61,6 +65,13 @@ builder.Services.AddAuthentication("Bearer")
     });
 
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+
+builder.Services.AddMediatR(cfg =>
+    cfg.RegisterServicesFromAssembly(typeof(RegisterUserCommand).Assembly));
+
+builder.Services.AddValidatorsFromAssembly(typeof(RegisterUserCommandValidator).Assembly);
+
+builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
 builder.Services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
 builder.Services.AddScoped<IUserService, User.Application.Service.UserService>();
 builder.Services.AddScoped<IJwtService, JwtService>();
