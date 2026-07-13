@@ -1,8 +1,8 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using User.Application.Commands.LoginUser;
 using User.Application.Commands.RegisterUser;
-using User.Application.DTOs;
 using User.Application.Interface;
 
 namespace UserService.Controllers;
@@ -30,9 +30,9 @@ public class UserController : ControllerBase
 
     [AllowAnonymous]
     [HttpPost("login")]
-    public async Task<IActionResult> Login(LoginDto dto)
+    public async Task<ActionResult> Login(LoginUserCommand command)
     {
-        var result = await _userService.Login(dto);
+        var result = await _mediator.Send(command);
         return Ok(result);
     }
     
