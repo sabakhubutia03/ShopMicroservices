@@ -2,8 +2,8 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using User.Application.Commands.LoginUser;
+using User.Application.Commands.LogoutUser;
 using User.Application.Commands.RegisterUser;
-using User.Application.Interface;
 using User.Application.Queries.GetUserById;
 
 namespace UserService.Controllers;
@@ -12,12 +12,10 @@ namespace UserService.Controllers;
 [Route("api/[controller]")]
 public class UserController : ControllerBase
 {
-    private readonly IUserService _userService;
     private readonly IMediator _mediator;
 
-    public UserController(IUserService userService, IMediator mediator)
+    public UserController(IMediator mediator)
     {
-        _userService = userService;
         _mediator = mediator;
     }
 
@@ -46,10 +44,10 @@ public class UserController : ControllerBase
         return Ok(result);
     }
 
-    [HttpPost("logout")]
-    public async Task<ActionResult> Logout(string refreshToken)
+    [HttpPost("Logout")]
+    public async Task<ActionResult> Logout(LogoutUserCommand command)
     {
-        await _userService.Logout(refreshToken);
-        return Ok("Logged out Successfully");
+        await _mediator.Send(command);
+        return NoContent();
     }
 }

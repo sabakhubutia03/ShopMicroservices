@@ -73,7 +73,6 @@ builder.Services.AddValidatorsFromAssembly(typeof(RegisterUserCommandValidator).
 
 builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
 builder.Services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
-builder.Services.AddScoped<IUserService, User.Application.Service.UserService>();
 builder.Services.AddScoped<IJwtService, JwtService>();
 
 var app = builder.Build();
