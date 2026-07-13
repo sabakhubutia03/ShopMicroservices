@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using User.Application.Commands.LoginUser;
 using User.Application.Commands.RegisterUser;
 using User.Application.Interface;
+using User.Application.Queries.GetUserById;
 
 namespace UserService.Controllers;
 [Authorize]
@@ -35,12 +36,13 @@ public class UserController : ControllerBase
         var result = await _mediator.Send(command);
         return Ok(result);
     }
-    
+
     [AllowAnonymous]
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetById(int id)
+    public async Task<ActionResult> GetUserById(int id)
     {
-        var result = await _userService.GetById(id);
+        var query = new GetUserByIdQuery(id);
+        var result = await _mediator.Send(query);
         return Ok(result);
     }
 
