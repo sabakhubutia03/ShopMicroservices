@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Product.Application.Commands.Category;
+using Product.Application.Commands.Category.UpdateCategory;
 using Product.Application.DTOs;
 using Product.Application.Interface;
 
@@ -44,10 +45,11 @@ public class CategoryController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    public async Task<ActionResult> Put(int id, CategoryUpdateDto dto)
+    public async Task<ActionResult> UpdateCategory(int id, UpdateCategoryRequest request)
     {
-        var update = await _categoryService.UpdateCategory(id, dto);
-        return Ok(update);
+        var command = new UpdateCategoryCommand(id, request.Name);
+        var result = await _mediator.Send(command);
+        return Ok(result);
     }
 
     [HttpDelete("{id}")]
