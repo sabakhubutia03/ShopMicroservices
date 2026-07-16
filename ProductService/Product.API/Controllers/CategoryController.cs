@@ -1,20 +1,24 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Product.Application.Commands.Category;
 using Product.Application.DTOs;
 using Product.Application.Interface;
 
 
 namespace ProductService.Controllers;
-[Authorize]
+// [Authorize] -- Test !!
 [ApiController]
 [Route("api/[controller]")]
 public class CategoryController : ControllerBase
 {
     private readonly ICategoryService _categoryService;
+    private readonly IMediator _mediator;
 
-    public CategoryController(ICategoryService categoryService)
+    public CategoryController(ICategoryService categoryService, IMediator mediator)
     {
         _categoryService = categoryService;
+        _mediator = mediator;
     }
 
     [HttpGet]
@@ -33,10 +37,10 @@ public class CategoryController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult> Post(CategoryCreateDto dto)
+    public async Task<ActionResult> CreateCategory(CreateCategoryCommand command)
     {
-        var create = await _categoryService.CreateCategory(dto);
-        return CreatedAtAction(nameof(Get), new { id = create.Id }, create);
+        var result = await _mediator.Send(command);
+        return Ok(result);
     }
 
     [HttpPut("{id}")]

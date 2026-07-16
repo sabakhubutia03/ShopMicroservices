@@ -1,7 +1,11 @@
 using System.Text;
+using FluentValidation;
+using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Product.Application.Behaviors;
+using Product.Application.Commands.Category;
 using Product.Application.Interface;
 using Product.Application.Service;
 using Product.Infrastructure.Data;
@@ -42,6 +46,14 @@ builder.Services.AddSwaggerGen(c =>
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddMediatR(cfg => 
+    cfg.RegisterServicesFromAssembly(typeof(CreateCategoryCommand).Assembly));
+
+
+builder.Services.AddValidatorsFromAssembly(typeof(CreateCategoryCommandValidator).Assembly);
+
+builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
 
 builder.Services.AddScoped<IProductRepository , ProductRepository>();
 builder.Services.AddScoped<IProductService, Product.Application.Service.ProductService>();
