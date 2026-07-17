@@ -1,10 +1,8 @@
 ﻿using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Product.Application.Commands.Category;
+using Product.Application.Commands.Category.DeleteCategory;
 using Product.Application.Commands.Category.UpdateCategory;
-using Product.Application.DTOs;
-using Product.Application.Interface;
 using Product.Application.Queries.GetCategory;
 using Product.Application.Queries.GetCategoryById;
 
@@ -15,12 +13,11 @@ namespace ProductService.Controllers;
 [Route("api/[controller]")]
 public class CategoryController : ControllerBase
 {
-    private readonly ICategoryService _categoryService;
+    
     private readonly IMediator _mediator;
 
-    public CategoryController(ICategoryService categoryService, IMediator mediator)
+    public CategoryController(IMediator mediator)
     {
-        _categoryService = categoryService;
         _mediator = mediator;
     }
 
@@ -56,9 +53,10 @@ public class CategoryController : ControllerBase
     }
 
     [HttpDelete("{id}")]
-    public async Task<ActionResult> Delete(int id)
+    public async Task<ActionResult> DeleteCategory(int id)
     {
-        await _categoryService.DeleteCategory(id);
+        var command = new DeleteCategoryCommand(id);
+        await _mediator.Send(command);
         return NoContent();
     }
 }

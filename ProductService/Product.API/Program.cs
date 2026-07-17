@@ -7,7 +7,6 @@ using Microsoft.IdentityModel.Tokens;
 using Product.Application.Behaviors;
 using Product.Application.Commands.Category;
 using Product.Application.Interface;
-using Product.Application.Service;
 using Product.Infrastructure.Data;
 using Product.Infrastructure.Repository;
 using ProductService.Middleware;
@@ -59,7 +58,6 @@ builder.Services.AddScoped<IProductRepository , ProductRepository>();
 builder.Services.AddScoped<IProductService, Product.Application.Service.ProductService>();
 
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
-builder.Services.AddScoped<ICategoryService, CategoryService>();
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
