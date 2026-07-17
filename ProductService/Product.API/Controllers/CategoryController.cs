@@ -5,6 +5,8 @@ using Product.Application.Commands.Category;
 using Product.Application.Commands.Category.UpdateCategory;
 using Product.Application.DTOs;
 using Product.Application.Interface;
+using Product.Application.Queries.GetCategory;
+using Product.Application.Queries.GetCategoryById;
 
 
 namespace ProductService.Controllers;
@@ -23,18 +25,19 @@ public class CategoryController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<CategoryResponseDto>>> Get()
+    public async Task<ActionResult> GetAllCategories()
     {
-        var categoryGetAll = await _categoryService.GetAllCategories();
-        return Ok(categoryGetAll);
+        var query = new GetCategoryQuery();
+        var response = await _mediator.Send(query);
+        return Ok(response);
     }
 
     [HttpGet("{id}")]
-
-    public async Task<ActionResult<CategoryResponseDto>> Get(int id)
+    public async Task<ActionResult> GetCategoryById(int id)
     {
-        var categoryGet = await _categoryService.GetCategoryById(id);
-        return Ok(categoryGet);
+        var query = new GetCategoryByIdQuery(id);
+        var result = await _mediator.Send(query);
+        return Ok(result);
     }
 
     [HttpPost]
