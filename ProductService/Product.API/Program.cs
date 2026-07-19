@@ -55,7 +55,6 @@ builder.Services.AddValidatorsFromAssembly(typeof(CreateCategoryCommandValidator
 builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
 
 builder.Services.AddScoped<IProductRepository , ProductRepository>();
-builder.Services.AddScoped<IProductService, Product.Application.Service.ProductService>();
 
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 

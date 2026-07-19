@@ -1,54 +1,61 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Product.Application.DTOs;
-using Product.Application.Interface;
+using Product.Application.Commands.Product.Create;
+using Product.Application.Commands.Product.DeleteProduct;
+using Product.Application.Commands.Product.UpdateProduct;
+using Product.Application.Queries.Product.GetAllProdcut;
+using Product.Application.Queries.Product.GetByIdProduct;
 
 namespace ProductService.Controllers;
-[Authorize]
+// [Authorize] -- TEST  
 [ApiController]
 [Route("api/[controller]")]
 public class ProductController : ControllerBase
 {
-    private readonly IProductService _productService;
+    private readonly IMediator _mediator;
 
-    public ProductController(IProductService productService)
+    public ProductController(IMediator mediator)
     {
-        _productService = productService;
+        _mediator = mediator;
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<ProductResponseDto>>> GetAll()
+    public async Task<ActionResult> GetAll()
     {
-        var response = await _productService.GetAllProducts();
-        return Ok(response);
+        var result = await _mediator.Send(new GetAllProdcutQuery());
+        return Ok(result);
     }
 
     [AllowAnonymous]
     [HttpGet("{id}")]
-    public async Task<ActionResult<ProductResponseDto>> GetById(int id)
+    public async Task<ActionResult> GetById(int id)
     {
-        var response = await _productService.GetProductById(id);
-        return Ok(response);
+        var query = new GetByIdProductQuery(id);
+        var result = await _mediator.Send(query);
+        return Ok(result);
     }
 
     [HttpPost]
-    public async Task<ActionResult> Create(ProductCreateDto dto)
+    public async Task<ActionResult> CreateProduct(CreateProductCommand command)
     {
-        var createdProduct = await _productService.CreateProduct(dto);
-        return CreatedAtAction(nameof(GetById), new { id = createdProduct.Id }, createdProduct);
+        var result = await _mediator.Send(command);
+        return Ok(result);
     }
 
     [HttpPut("{id}")]
-    public async Task<ActionResult> Update(int id, ProductUpdateDto dto)
+    public async Task<ActionResult> UpdateProdcut(int id , UpdateProdcutCommand command)
     {
-        var updatedProduct = await _productService.UpdateProduct(id, dto);
-        return Ok(updatedProduct);
+        var commandWith = command with { Id = id };
+        var result = await _mediator.Send(commandWith);
+        return Ok(result);
     }
 
     [HttpDelete("{id}")]
-    public async Task<ActionResult> Delete(int id)
+    public async Task<ActionResult> DeleteProduct(int id)
     {
-        await _productService.DeleteProduct(id);
+        var delete = new DeleteProductCommand(id);
+        await _mediator.Send(delete);
         return NoContent();
     }
 }
