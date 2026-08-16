@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Order.API.Middleware;
 using Order.Application.Interface;
+using Order.Application.Queries.GetAllOrder;
 using Order.Application.Service;
 using Order.Infrastructure.Data;
 using Order.Infrastructure.Repository;
@@ -17,6 +18,11 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddHttpClient();
+
+builder.Services.AddMediatR(cfg =>
+    cfg.RegisterServicesFromAssembly(typeof(GetAllOrderQuery).Assembly));
+    
+    
 builder.Services.AddScoped<IOrderService,OrderService>();
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 var app = builder.Build();

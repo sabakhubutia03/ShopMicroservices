@@ -18,20 +18,20 @@ public class OrderService : IOrderService
         _configuration = configuration;
     }
     
-    public async Task<IEnumerable<OrderResponseDto>> GetAllOrders()
-    {
-        var getAll = await _orderRepository.GetAll();
-        return getAll.Select(o => new OrderResponseDto
-        {
-            Id = o.Id,
-            Price = o.Price,
-            ProductId = o.ProductId,
-            Quantity = o.Quantity,
-            TotalPrice = o.TotalPrice,
-            UserId = o.UserId,
-            Date = o.Date
-        });
-    }
+    // public async Task<IEnumerable<OrderResponseDto>> GetAllOrders()
+    // {
+    //     var getAll = await _orderRepository.GetAll();
+    //     return getAll.Select(o => new OrderResponseDto
+    //     {
+    //         Id = o.Id,
+    //         Price = o.Price,
+    //         ProductId = o.ProductId,
+    //         Quantity = o.Quantity,
+    //         TotalPrice = o.TotalPrice,
+    //         UserId = o.UserId,
+    //         Date = o.Date
+    //     });
+    // }
 
     public async Task<OrderResponseDto> GetOrderById(int id)
     {

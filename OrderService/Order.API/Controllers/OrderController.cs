@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using MediatR;
+using Microsoft.AspNetCore.Mvc;
 using Order.Application.DTOs;
 using Order.Application.Interface;
+using Order.Application.Queries.GetAllOrder;
 
 namespace Order.API.Controllers;
 [ApiController]
@@ -8,17 +10,19 @@ namespace Order.API.Controllers;
 public class OrderController : ControllerBase
 {
     private readonly IOrderService _orderService;
+    private readonly IMediator _mediator;
 
-    public OrderController(IOrderService orderService)
+    public OrderController(IOrderService orderService, IMediator mediator)
     {
         _orderService = orderService;
+        _mediator = mediator;
     }
 
     [HttpGet]
-    public async Task<ActionResult<OrderResponseDto>> GetAll()
+    public async Task<ActionResult> GetAll()
     {
-        var ordersAll = await _orderService.GetAllOrders();
-        return Ok(ordersAll);
+        var result = await _mediator.Send(new GetAllOrderQuery());
+        return Ok(result);
     }
 
     [HttpGet("{id}")]
