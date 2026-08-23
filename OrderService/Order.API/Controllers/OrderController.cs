@@ -1,8 +1,10 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Order.Application.Commands.CreateOrder;
 using Order.Application.DTOs;
 using Order.Application.Interface;
 using Order.Application.Queries.GetAllOrder;
+using Order.Application.Queries.GetOrderId;
 
 namespace Order.API.Controllers;
 [ApiController]
@@ -26,17 +28,18 @@ public class OrderController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<OrderResponseDto>> GetOrderId(int id)
-    {
-        var orderId = await _orderService.GetOrderById(id);
-        return Ok(orderId);
+    public async Task<ActionResult> GetById(int id)
+    { 
+        var query = new GetOrderByIdQuery(id);
+        var reuslt = await _mediator.Send(query);
+        return Ok(reuslt);
     }
 
     [HttpPost]
-    public async Task<ActionResult<OrderResponseDto>> Create(OrderCreateDto createDto)
+    public async Task<ActionResult> Create(CreateOrderCommand command)
     {
-        var create = await _orderService.Create(createDto);
-        return CreatedAtAction(nameof(GetOrderId), new { id = create.Id }, create);
+        var result = await _mediator.Send(command);
+        return Ok(result);
     }
 
     [HttpPut("{id}")]
